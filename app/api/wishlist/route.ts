@@ -86,7 +86,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     wishlist.products = wishlist.products.filter(
-      (id) => id.toString() !== productId
+      (id: any) => id.toString() !== productId
     );
 
     await wishlist.save();
