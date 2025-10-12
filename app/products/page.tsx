@@ -1,13 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/ProductCard';
 import { FiSearch, FiX, FiFilter } from 'react-icons/fi';
 
-export const dynamic = 'force-dynamic';
-
-export default function ProductsPage() {
+function ProductsList() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -340,6 +338,18 @@ export default function ProductsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={
+      <div className="container-custom py-12">
+        <div className="text-center">Loading products...</div>
+      </div>
+    }>
+      <ProductsList />
+    </Suspense>
   );
 }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/store/cartStore';
@@ -113,9 +113,20 @@ export default function CheckoutPage() {
     }
   };
 
+  useEffect(() => {
+    if (items.length === 0) {
+      router.push('/cart');
+    }
+  }, [items.length, router]);
+
   if (items.length === 0) {
-    router.push('/cart');
-    return null;
+    return (
+      <div className="container-custom py-12">
+        <div className="text-center">
+          <p className="text-gray-600">Redirecting to cart...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
