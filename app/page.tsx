@@ -12,7 +12,12 @@ import {
   FiTruck,
   FiShield,
   FiTag,
-  FiClock
+  FiClock,
+  FiPackage,
+  FiDollarSign,
+  FiSmartphone,
+  FiUsers,
+  FiCheckCircle
 } from 'react-icons/fi';
 
 export const dynamic = 'force-dynamic';
@@ -95,6 +100,11 @@ export default async function Home() {
     .sort((a: any, b: any) => b.averageRating - a.averageRating)
     .slice(0, 8);
 
+  // Get best sellers (most reviews)
+  const bestSellers = [...allProducts]
+    .sort((a: any, b: any) => (b.reviews?.length || 0) - (a.reviews?.length || 0))
+    .slice(0, 8);
+
   // Get best deals (highest discount)
   const bestDeals = [...allProducts]
     .filter((p: any) => p.compareAtPrice && p.compareAtPrice > p.ourPrice)
@@ -105,6 +115,18 @@ export default async function Home() {
     })
     .slice(0, 8);
 
+  // Budget buys (under ₹500)
+  const budgetBuys = [...allProducts]
+    .filter((p: any) => p.ourPrice < 500)
+    .sort((a: any, b: any) => b.averageRating - a.averageRating)
+    .slice(0, 8);
+
+  // Premium products (above ₹1000)
+  const premiumProducts = [...allProducts]
+    .filter((p: any) => p.ourPrice >= 1000)
+    .sort((a: any, b: any) => b.averageRating - a.averageRating)
+    .slice(0, 8);
+
   // Health concern categories (like 1mg/Netmeds)
   const healthConcerns = [
     { name: 'Diabetes Care', icon: '🩸', category: 'Vitamins & Supplements', color: 'bg-blue-100 text-blue-600' },
@@ -113,6 +135,16 @@ export default async function Home() {
     { name: 'Bone & Joint', icon: '🦴', category: 'Ayurvedic', color: 'bg-orange-100 text-orange-600' },
     { name: 'Weight Loss', icon: '⚖️', category: 'Weight Management', color: 'bg-purple-100 text-purple-600' },
     { name: 'Skin Care', icon: '✨', category: 'Protein Supplements', color: 'bg-pink-100 text-pink-600' },
+  ];
+
+  // Category cards with icons
+  const categoryCards = [
+    { name: 'Vitamins & Supplements', icon: '💊', image: '🧪', count: allProducts.filter((p: any) => p.category === 'Vitamins & Supplements').length },
+    { name: 'Protein Supplements', icon: '💪', image: '🥤', count: allProducts.filter((p: any) => p.category === 'Protein Supplements').length },
+    { name: 'Ayurvedic', icon: '🌿', image: '🍃', count: allProducts.filter((p: any) => p.category === 'Ayurvedic').length },
+    { name: 'Immunity Boosters', icon: '🛡️', image: '💉', count: allProducts.filter((p: any) => p.category === 'Immunity Boosters').length },
+    { name: 'Weight Management', icon: '⚖️', image: '🏃', count: allProducts.filter((p: any) => p.category === 'Weight Management').length },
+    { name: 'Sports Nutrition', icon: '🏋️', image: '⚡', count: allProducts.filter((p: any) => p.category === 'Sports Nutrition').length },
   ];
 
   return (
@@ -182,6 +214,76 @@ export default async function Home() {
         </section>
       )}
 
+      {/* Shop by Category */}
+      <section className="py-12 bg-gradient-to-br from-indigo-50 to-blue-50">
+        <div className="container-custom">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-3">
+              <div className="bg-indigo-600 text-white p-3 rounded-lg">
+                <FiPackage className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Shop by Category
+                </h2>
+                <p className="text-gray-600">Explore our wide range of products</p>
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            {categoryCards.map((cat) => (
+              <Link
+                key={cat.name}
+                href={`/products?category=${encodeURIComponent(cat.name)}`}
+                className="group bg-white rounded-xl p-5 hover:shadow-xl transition-all border-2 border-transparent hover:border-indigo-500"
+              >
+                <div className="text-center">
+                  <div className="text-5xl mb-3 group-hover:scale-110 transition-transform">
+                    {cat.image}
+                  </div>
+                  <h3 className="font-semibold text-gray-900 text-sm mb-1 group-hover:text-indigo-600">
+                    {cat.name}
+                  </h3>
+                  <p className="text-xs text-gray-500">{cat.count} Products</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Best Sellers */}
+      {bestSellers.length > 0 && (
+        <section className="py-12 bg-white">
+          <div className="container-custom">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="bg-yellow-600 text-white p-3 rounded-lg">
+                  <FiStar className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    🏆 Best Sellers
+                  </h2>
+                  <p className="text-gray-600">Most loved by our customers</p>
+                </div>
+              </div>
+              <Link
+                href="/products"
+                className="text-yellow-600 hover:text-yellow-700 font-semibold flex items-center gap-1"
+              >
+                View All <span>→</span>
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {bestSellers.map((product: any) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Featured Products */}
       {featuredProducts.length > 0 && (
         <section className="py-12 bg-gray-50">
@@ -204,6 +306,38 @@ export default async function Home() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {featuredProducts.map((product: any) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Budget Buys - Under ₹500 */}
+      {budgetBuys.length > 0 && (
+        <section className="py-12 bg-gradient-to-r from-emerald-50 to-teal-50">
+          <div className="container-custom">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="bg-emerald-600 text-white p-3 rounded-lg">
+                  <FiDollarSign className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    💸 Budget Buys
+                  </h2>
+                  <p className="text-gray-600">Top rated products under ₹500</p>
+                </div>
+              </div>
+              <Link
+                href="/products"
+                className="text-emerald-600 hover:text-emerald-700 font-semibold flex items-center gap-1"
+              >
+                View All <span>→</span>
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {budgetBuys.map((product: any) => (
                 <ProductCard key={product._id} product={product} />
               ))}
             </div>
@@ -236,6 +370,38 @@ export default async function Home() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {bestDeals.map((product: any) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Premium Range */}
+      {premiumProducts.length > 0 && (
+        <section className="py-12 bg-gradient-to-br from-amber-50 to-yellow-50">
+          <div className="container-custom">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="bg-amber-600 text-white p-3 rounded-lg">
+                  <FiAward className="w-6 h-6" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    👑 Premium Range
+                  </h2>
+                  <p className="text-gray-600">High-quality premium products</p>
+                </div>
+              </div>
+              <Link
+                href="/products"
+                className="text-amber-600 hover:text-amber-700 font-semibold flex items-center gap-1"
+              >
+                View All <span>→</span>
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {premiumProducts.map((product: any) => (
                 <ProductCard key={product._id} product={product} />
               ))}
             </div>
@@ -307,11 +473,59 @@ export default async function Home() {
         </section>
       )}
 
+      {/* Download App Banner */}
+      <section className="py-16 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600">
+        <div className="container-custom">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex-1 text-white">
+              <div className="flex items-center gap-3 mb-4">
+                <FiSmartphone className="w-12 h-12" />
+                <div>
+                  <h2 className="text-3xl font-bold mb-2">
+                    Download the Nutracuiticals App
+                  </h2>
+                  <p className="text-indigo-100 text-lg">
+                    Get exclusive app-only deals & offers
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center gap-3">
+                  <FiCheckCircle className="w-6 h-6 text-green-300" />
+                  <span className="text-white">Extra 5% discount on app orders</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FiCheckCircle className="w-6 h-6 text-green-300" />
+                  <span className="text-white">Early access to flash sales</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <FiCheckCircle className="w-6 h-6 text-green-300" />
+                  <span className="text-white">Track orders in real-time</span>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-4">
+                <button className="bg-black text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-900 transition flex items-center gap-2">
+                  <span className="text-2xl">📱</span>
+                  App Store
+                </button>
+                <button className="bg-black text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-900 transition flex items-center gap-2">
+                  <span className="text-2xl">▶️</span>
+                  Google Play
+                </button>
+              </div>
+            </div>
+            <div className="flex-shrink-0">
+              <div className="text-9xl">📱</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Why Choose Us - Trust Badges */}
       <section className="py-12 bg-white border-y">
         <div className="container-custom">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Why Nutracuiticals?
+            Why 50,000+ Customers Trust Nutracuiticals
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center">
@@ -343,11 +557,11 @@ export default async function Home() {
             </div>
             <div className="text-center">
               <div className="bg-orange-100 text-orange-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
-                <FiStar className="w-8 h-8" />
+                <FiUsers className="w-8 h-8" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-1">5-Star Rated</h3>
+              <h3 className="font-semibold text-gray-900 mb-1">50,000+ Happy Customers</h3>
               <p className="text-sm text-gray-600">
-                Trusted by thousands
+                Trusted nationwide
               </p>
             </div>
           </div>
@@ -432,7 +646,7 @@ export default async function Home() {
             </button>
           </div>
           <p className="text-primary-200 text-xs mt-3">
-            Join 10,000+ happy customers getting healthier every day
+            Join 50,000+ happy customers getting healthier every day
           </p>
         </div>
       </section>
