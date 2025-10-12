@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { FiHome, FiPackage, FiShoppingBag, FiSettings, FiUsers, FiShoppingCart, FiTag, FiBarChart, FiLogOut, FiGlobe } from 'react-icons/fi';
+import { FiHome, FiPackage, FiShoppingBag, FiSettings, FiUsers, FiShoppingCart, FiTag, FiBarChart, FiLogOut, FiGlobe, FiDatabase } from 'react-icons/fi';
 
 export default function AdminLayout({
   children,
@@ -27,6 +27,7 @@ export default function AdminLayout({
     { href: '/admin/analytics', label: 'Analytics', icon: FiBarChart },
     { href: '/admin/users', label: 'Users', icon: FiUsers },
     { href: '/admin/settings', label: 'Settings', icon: FiSettings },
+    { href: '/admin/seed', label: 'Seed Database', icon: FiDatabase },
   ];
 
   return (
