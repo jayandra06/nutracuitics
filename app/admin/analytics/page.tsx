@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FiTrendingUp, FiDollarSign, FiShoppingBag, FiUsers } from 'react-icons/fi';
+import { FiTrendingUp, FiDollarSign, FiShoppingBag, FiUsers, FiStar } from 'react-icons/fi';
 
 export default function AnalyticsPage() {
   const [stats, setStats] = useState<any>({

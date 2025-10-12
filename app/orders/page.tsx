@@ -65,7 +65,7 @@ export default function OrdersPage() {
             No Orders Yet
           </h1>
           <p className="text-gray-600 mb-8">
-            You haven't placed any orders yet. Start shopping!
+            You haven&apos;t placed any orders yet. Start shopping!
           </p>
           <Link
             href="/products"
