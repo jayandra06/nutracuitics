@@ -122,7 +122,7 @@ export default function AnalyticsPage() {
                       Order #{order.orderNumber}
                     </p>
                     <p className="text-xs text-gray-600">
-                      {format(new Date(order.createdAt), 'PP')}
+                      {new Date(order.createdAt).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="text-right">
