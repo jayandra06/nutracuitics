@@ -109,7 +109,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
               Order #{order.orderNumber}
             </h1>
             <p className="text-gray-600">
-              Placed on {format(new Date(order.createdAt), 'PPP')}
+              Placed on {new Date(order.createdAt).toLocaleDateString()}
             </p>
           </div>
           <div className={`px-4 py-2 rounded-lg ${getStatusColor(order.orderStatus)}`}>

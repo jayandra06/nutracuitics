@@ -142,7 +142,7 @@ export default function AdminOrdersPage() {
                     Order #{order.orderNumber}
                   </h3>
                   <p className="text-sm text-gray-600">
-                    {format(new Date(order.createdAt), 'PPP')}
+                    {new Date(order.createdAt).toLocaleDateString()}
                   </p>
                   <p className="text-sm text-gray-600">
                     Customer: {order.user?.name} ({order.user?.email})

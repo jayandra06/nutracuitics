@@ -313,7 +313,7 @@ export default function CouponsPage() {
                     {coupon.usedCount}/{coupon.usageLimit}
                   </td>
                   <td className="px-6 py-4 text-sm">
-                    {format(new Date(coupon.expiryDate), 'PP')}
+                    {new Date(coupon.expiryDate).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4">
                     <span

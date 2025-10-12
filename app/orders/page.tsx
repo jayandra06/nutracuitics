@@ -91,7 +91,7 @@ export default function OrdersPage() {
                   Order #{order.orderNumber}
                 </h3>
                 <p className="text-sm text-gray-600">
-                  Placed on {format(new Date(order.createdAt), 'PPP')}
+                  Placed on {new Date(order.createdAt).toLocaleDateString()}
                 </p>
               </div>
               <div className="flex items-center space-x-4">
