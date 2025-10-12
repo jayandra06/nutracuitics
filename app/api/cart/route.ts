@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
       });
     } else {
       const itemIndex = cart.items.findIndex(
-        (item) => item.product.toString() === productId
+        (item: any) => item.product.toString() === productId
       );
 
       if (itemIndex > -1) {
@@ -107,11 +107,11 @@ export async function DELETE(req: NextRequest) {
     }
 
     cart.items = cart.items.filter(
-      (item) => item.product.toString() !== productId
+      (item: any) => item.product.toString() !== productId
     );
 
     cart.totalAmount = cart.items.reduce(
-      (total, item) => total + item.price * item.quantity,
+      (total: number, item: any) => total + item.price * item.quantity,
       0
     );
 
