@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/store/cartStore';
 import toast from 'react-hot-toast';
 
+export const dynamic = 'force-dynamic';
+
 export default function CheckoutPage() {
   const { data: session } = useSession();
   const router = useRouter();

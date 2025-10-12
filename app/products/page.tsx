@@ -5,6 +5,8 @@ import { useSearchParams } from 'next/navigation';
 import ProductCard from '@/components/ProductCard';
 import { FiSearch, FiX, FiFilter } from 'react-icons/fi';
 
+export const dynamic = 'force-dynamic';
+
 export default function ProductsPage() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState([]);

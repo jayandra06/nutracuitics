@@ -4,6 +4,9 @@ import HeroCarousel from '@/components/HeroCarousel';
 import Link from 'next/link';
 import { FiZap, FiTrendingUp, FiAward } from 'react-icons/fi';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 async function getFeaturedProducts() {
   try {
     const res = await fetch(
