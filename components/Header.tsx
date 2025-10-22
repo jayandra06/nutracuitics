@@ -4,14 +4,19 @@ import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useCartStore } from '@/store/cartStore';
 import { useWishlistStore } from '@/store/wishlistStore';
-import { FiShoppingCart, FiUser, FiLogOut, FiMenu, FiChevronDown, FiHeart } from 'react-icons/fi';
+import { FiShoppingCart, FiUser, FiLogOut, FiMenu, FiChevronDown, FiHeart, FiPackage } from 'react-icons/fi';
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import LoginModal from './LoginModal';
+import Cart from './Cart';
 
 export default function Header() {
   const { data: session } = useSession();
+  const { user, logout } = useAuth();
   const getTotalItems = useCartStore((state) => state.getTotalItems);
   const wishlistItems = useWishlistStore((state) => state.items);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
@@ -41,6 +46,7 @@ export default function Header() {
   };
 
   return (
+    <>
     <header className="bg-gradient-to-r from-purple-900 to-green-800 shadow-lg sticky top-0 z-50">
       <div className="container-custom">
         <div className="flex items-center justify-between h-20">
@@ -104,6 +110,43 @@ export default function Header() {
 
           {/* Actions */}
           <div className="flex items-center space-x-4">
+            {/* Login/Profile */}
+            {user ? (
+              <div className="flex items-center space-x-4">
+                <Link
+                  href="/profile"
+                  className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-lg hover:bg-white/20 transition-all"
+                >
+                  <FiUser className="w-5 h-5" />
+                  <span>Profile</span>
+                </Link>
+                <Link
+                  href="/admin"
+                  className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-lg hover:bg-white/20 transition-all"
+                >
+                  <FiPackage className="w-5 h-5" />
+                  <span>Admin</span>
+                </Link>
+                <button
+                  onClick={logout}
+                  className="text-white/80 hover:text-white transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setIsLoginOpen(true)}
+                className="bg-white/10 backdrop-blur-sm border border-white/20 text-white px-4 py-2 rounded-lg hover:bg-white/20 transition-all flex items-center gap-2"
+              >
+                <FiUser className="w-5 h-5" />
+                <span>Login</span>
+              </button>
+            )}
+
+            {/* Cart */}
+            <Cart />
+
             {/* Get In Touch Button */}
             <Link
               href="/contact"
@@ -173,6 +216,10 @@ export default function Header() {
         )}
       </div>
     </header>
+
+    {/* Login Modal */}
+    <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+  </>
   );
 }
 

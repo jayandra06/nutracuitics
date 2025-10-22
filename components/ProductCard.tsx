@@ -6,6 +6,8 @@ import { FiShoppingCart, FiStar, FiHeart, FiExternalLink } from 'react-icons/fi'
 import { SiAmazon, SiFlipkart } from 'react-icons/si';
 import { useCartStore } from '@/store/cartStore';
 import { useWishlistStore } from '@/store/wishlistStore';
+import { useAnalytics } from '@/hooks/useAnalytics';
+import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 interface ProductLink {
@@ -51,8 +53,13 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem);
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore();
+  const { trackAddToCart, trackViewItem } = useAnalytics();
   const isFlashSale = product.tags?.includes('flash-sale');
   const inWishlist = isInWishlist(product._id);
+
+  useEffect(() => {
+    trackViewItem(product._id, product.name, product.category || 'General', product.ourPrice);
+  }, [product._id, product.name, product.category, product.ourPrice, trackViewItem]);
 
   const handleAddToCart = () => {
     addItem({
@@ -63,6 +70,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       image: product.images?.[0] || product.image || '/placeholder-product.jpg',
       slug: product.slug || product._id,
     });
+    trackAddToCart(product._id, product.name, product.category || 'General', product.ourPrice);
     toast.success('Added to cart!');
   };
 

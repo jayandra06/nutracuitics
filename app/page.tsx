@@ -107,7 +107,7 @@ export default function Home() {
                 <div className="flex items-center gap-2">
                   <FiCheckCircle className="w-5 h-5 text-green-400" />
                   <span className="text-sm">11 Years R&D</span>
-                </div>
+                  </div>
                 <div className="flex items-center gap-2">
                   <FiCheckCircle className="w-5 h-5 text-green-400" />
                   <span className="text-sm">Global Reach</span>
@@ -120,7 +120,7 @@ export default function Home() {
 
       {/* Enhanced Global Impact Strip */}
       <section className="relative -mt-20 z-20">
-        <div className="container-custom">
+          <div className="container-custom">
           <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20 relative overflow-hidden">
             {/* Background pattern */}
             <div className="absolute inset-0 bg-gradient-to-r from-purple-50/50 via-transparent to-green-50/50"></div>
@@ -187,15 +187,15 @@ export default function Home() {
                 </div>
               </div>
             </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       {/* About Us Section */}
       <section className="py-20 bg-white">
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
+              <div>
               <p className="text-purple-600 font-semibold mb-4">About Us</p>
               <h2 className="text-4xl font-bold text-gray-900 mb-6">Where Science Meets Nature</h2>
               <p className="text-lg text-gray-600 leading-relaxed mb-6">
@@ -219,7 +219,7 @@ export default function Home() {
                   <div className="text-center">
                     <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <FaFlask className="w-12 h-12 text-green-600" />
-                    </div>
+          </div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">Scientific Excellence</h3>
                     <p className="text-gray-600">Merging nature's wisdom with pharmaceutical precision</p>
                   </div>
@@ -232,17 +232,17 @@ export default function Home() {
 
       {/* Vision, Mission, Values Section */}
       <section className="py-20 bg-gray-50">
-        <div className="container-custom">
+          <div className="container-custom">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all group">
               <div className="bg-gradient-to-br from-purple-600 to-purple-700 text-white w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <FiEye className="w-8 h-8" />
-              </div>
+                </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Vision</h3>
               <p className="text-gray-600 leading-relaxed">
                 To redefine animal health through sustainable phyio-biotic innovations.
               </p>
-            </div>
+                </div>
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all group">
               <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <FiTarget className="w-8 h-8" />
@@ -261,13 +261,13 @@ export default function Home() {
                 Integrity • Innovation • Impact
               </p>
             </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       {/* Why Choose Us Section */}
       <section className="py-20 bg-white">
-        <div className="container-custom">
+          <div className="container-custom">
           <h2 className="text-4xl font-bold text-gray-900 text-center mb-16">Why Choose AXION SCIENTIFICS</h2>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
             <div className="text-center group">
@@ -287,10 +287,10 @@ export default function Home() {
             <div className="text-center group">
               <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                 <FaMicroscope className="w-10 h-10" />
-              </div>
+          </div>
               <h3 className="text-lg font-bold text-gray-900 mb-2">Natural Therapeutics</h3>
               <p className="text-sm text-gray-600">100% plant-based solutions</p>
-            </div>
+                </div>
             <div className="text-center group">
               <div className="bg-gradient-to-br from-red-500 to-red-600 text-white w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                 <FiShield className="w-10 h-10" />
@@ -305,19 +305,19 @@ export default function Home() {
               <h3 className="text-lg font-bold text-gray-900 mb-2">Global Reach</h3>
               <p className="text-sm text-gray-600">20+ countries served</p>
             </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       {/* Key Benefits Section */}
       <section className="py-20 bg-gradient-to-br from-purple-900 to-navy-800 text-white">
-        <div className="container-custom">
+          <div className="container-custom">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">The Herbal Advantage</h2>
             <p className="text-xl opacity-90 max-w-3xl mx-auto">
               Key functional features that make our natural formulations superior to synthetic alternatives
             </p>
-          </div>
+                </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
@@ -368,7 +368,7 @@ export default function Home() {
                 <h3 className="text-xl font-bold">Anti-inflammatory Action</h3>
               </div>
               <p className="text-white/90">Reduces oxidative and microbial stress for healthier animals.</p>
-            </div>
+                </div>
 
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
               <div className="flex items-center mb-4">
@@ -390,8 +390,8 @@ export default function Home() {
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Economic Advantages</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Our herbal solutions deliver measurable cost savings and improved profitability for farmers worldwide
-            </p>
-          </div>
+              </p>
+            </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
@@ -469,7 +469,7 @@ export default function Home() {
                 <button className="text-green-600 font-semibold hover:text-green-700 flex items-center gap-2 mx-auto">
                   Learn More <FiArrowRight className="w-4 h-4" />
                 </button>
-              </div>
+          </div>
             </div>
 
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all group border border-gray-100">
@@ -482,7 +482,7 @@ export default function Home() {
                 <button className="text-purple-600 font-semibold hover:text-purple-700 flex items-center gap-2 mx-auto">
                   Learn More <FiArrowRight className="w-4 h-4" />
                 </button>
-              </div>
+            </div>
             </div>
           </div>
         </div>

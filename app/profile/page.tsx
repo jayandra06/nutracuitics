@@ -1,160 +1,224 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { FiUser, FiPhone, FiMail, FiMapPin, FiPackage, FiTruck, FiCheckCircle } from 'react-icons/fi';
 import Link from 'next/link';
-import { FiUser, FiPackage, FiHeart, FiSettings } from 'react-icons/fi';
+
+interface Order {
+  id: string;
+  items: any[];
+  customer: any;
+  total: number;
+  gst: number;
+  subtotal: number;
+  status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+  createdAt: string;
+  trackingNumber?: string;
+}
 
 export default function ProfilePage() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-  const [stats, setStats] = useState({
-    totalOrders: 0,
-    wishlistItems: 0,
-  });
+  const { user, logout } = useAuth();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/profile');
-    }
-  }, [status, router]);
+    fetchOrders();
+  }, []);
 
-  if (status === 'loading') {
+  const fetchOrders = async () => {
+    try {
+      const response = await fetch('/api/orders');
+      const result = await response.json();
+      if (result.success) {
+        setOrders(result.orders);
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+    }).format(price);
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'confirmed':
+        return 'bg-blue-100 text-blue-800';
+      case 'shipped':
+        return 'bg-purple-100 text-purple-800';
+      case 'delivered':
+        return 'bg-green-100 text-green-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'delivered':
+        return <FiCheckCircle className="w-5 h-5" />;
+      case 'shipped':
+        return <FiTruck className="w-5 h-5" />;
+      default:
+        return <FiPackage className="w-5 h-5" />;
+    }
+  };
+
+  if (!user) {
     return (
-      <div className="container-custom py-12">
-        <div className="text-center">Loading...</div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Please Login</h1>
+          <p className="text-gray-600 mb-6">You need to be logged in to view your profile</p>
+          <Link
+            href="/"
+            className="bg-gradient-to-r from-purple-600 to-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-green-700 transition-all"
+          >
+            Go to Home
+          </Link>
+        </div>
       </div>
     );
   }
 
-  if (!session) {
-    return null;
-  }
-
   return (
-    <div className="container-custom py-12">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">My Profile</h1>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Profile Info */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center justify-center mb-4">
-              <div className="bg-primary-100 text-primary-600 w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold">
-                {session.user.name?.charAt(0).toUpperCase()}
-              </div>
-            </div>
-            <h2 className="text-xl font-bold text-center mb-2">
-              {session.user.name}
-            </h2>
-            <p className="text-gray-600 text-center text-sm mb-4">
-              {session.user.email}
-            </p>
-            <div className="border-t pt-4">
-              <p className="text-sm text-gray-600 mb-2">
-                <span className="font-semibold">Role:</span>{' '}
-                <span className="capitalize">{session.user.role}</span>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Quick Links */}
-        <div className="lg:col-span-2">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <Link
-              href="/orders"
-              className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition"
-            >
-              <div className="flex items-center space-x-4">
-                <div className="bg-blue-100 text-blue-600 p-3 rounded-lg">
-                  <FiPackage className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg">My Orders</h3>
-                  <p className="text-gray-600 text-sm">View order history</p>
-                </div>
-              </div>
-            </Link>
-
-            <Link
-              href="/wishlist"
-              className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition"
-            >
-              <div className="flex items-center space-x-4">
-                <div className="bg-red-100 text-red-600 p-3 rounded-lg">
-                  <FiHeart className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg">My Wishlist</h3>
-                  <p className="text-gray-600 text-sm">Saved items</p>
-                </div>
-              </div>
-            </Link>
-
-            <Link
-              href="/cart"
-              className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition"
-            >
-              <div className="flex items-center space-x-4">
-                <div className="bg-green-100 text-green-600 p-3 rounded-lg">
-                  <FiUser className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg">Shopping Cart</h3>
-                  <p className="text-gray-600 text-sm">Review cart items</p>
-                </div>
-              </div>
-            </Link>
-
-            {session.user.role === 'admin' && (
-              <Link
-                href="/admin"
-                className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition"
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="bg-purple-100 text-purple-600 p-3 rounded-lg">
-                    <FiSettings className="w-6 h-6" />
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="container-custom">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Profile Info */}
+            <div className="lg:col-span-1">
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <div className="text-center mb-6">
+                  <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <FiUser className="w-10 h-10 text-white" />
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Admin Panel</h3>
-                    <p className="text-gray-600 text-sm">Manage store</p>
+                  <h2 className="text-xl font-bold text-gray-900">Welcome back!</h2>
+                  <p className="text-gray-600">{user.phoneNumber || user.email}</p>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <FiPhone className="w-5 h-5 text-gray-400" />
+                    <span className="text-gray-600">{user.phoneNumber || 'Not provided'}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <FiMail className="w-5 h-5 text-gray-400" />
+                    <span className="text-gray-600">{user.email || 'Not provided'}</span>
                   </div>
                 </div>
-              </Link>
-            )}
-          </div>
 
-          {/* Account Information */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-xl font-bold mb-4">Account Information</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  value={session.user.name || ''}
-                  disabled
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50"
-                />
+                <button
+                  onClick={logout}
+                  className="w-full mt-6 bg-red-500 text-white py-2 rounded-lg font-semibold hover:bg-red-600 transition-all"
+                >
+                  Logout
+                </button>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  value={session.user.email || ''}
-                  disabled
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50"
-                />
+            </div>
+
+            {/* Order History */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">Order History</h2>
+                
+                {loading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
+                    <p className="text-gray-600 mt-2">Loading orders...</p>
+                  </div>
+                ) : orders.length === 0 ? (
+                  <div className="text-center py-8">
+                    <FiPackage className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No orders yet</h3>
+                    <p className="text-gray-600 mb-6">Start shopping to see your orders here</p>
+                    <Link
+                      href="/products"
+                      className="bg-gradient-to-r from-purple-600 to-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-green-700 transition-all"
+                    >
+                      Browse Products
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {orders.map((order) => (
+                      <div key={order.id} className="border border-gray-200 rounded-lg p-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div>
+                            <h3 className="font-semibold text-gray-900">Order #{order.id}</h3>
+                            <p className="text-sm text-gray-600">
+                              {new Date(order.createdAt).toLocaleDateString('en-IN', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
+                              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                            </span>
+                            <p className="text-lg font-bold text-purple-600 mt-1">
+                              {formatPrice(order.total)}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="space-y-2 mb-4">
+                          {order.items.map((item, index) => (
+                            <div key={index} className="flex justify-between text-sm">
+                              <span className="text-gray-600">
+                                {item.name} x {item.quantity}
+                              </span>
+                              <span className="font-medium">
+                                {formatPrice(item.price * item.quantity)}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="flex items-center justify-between pt-4 border-t">
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            {getStatusIcon(order.status)}
+                            <span>
+                              {order.status === 'delivered' && 'Delivered'}
+                              {order.status === 'shipped' && 'Shipped'}
+                              {order.status === 'confirmed' && 'Confirmed'}
+                              {order.status === 'pending' && 'Processing'}
+                            </span>
+                            {order.trackingId && (
+                              <a
+                                href={`/track?id=${order.trackingId}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="ml-4 text-purple-600 hover:text-purple-700 font-medium"
+                              >
+                                Track: {order.trackingId}
+                              </a>
+                            )}
+                          </div>
+                          <button className="text-purple-600 hover:text-purple-700 font-medium text-sm">
+                            View Details
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-              <p className="text-sm text-gray-500">
-                To update your information, please contact support.
-              </p>
             </div>
           </div>
         </div>
@@ -162,4 +226,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
