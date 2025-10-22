@@ -12,18 +12,17 @@ function ProductsList() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 10000 });
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 6000 });
   const [sortBy, setSortBy] = useState('featured');
   const [showFilters, setShowFilters] = useState(false);
 
   const categories = [
     { value: 'all', label: 'All Products' },
-    { value: 'Supplements', label: 'Supplements' },
-    { value: 'Vitamins', label: 'Vitamins' },
-    { value: 'Minerals', label: 'Minerals' },
-    { value: 'Probiotics', label: 'Probiotics' },
-    { value: 'Protein', label: 'Protein' },
-    { value: 'Herbs', label: 'Herbs' },
+    { value: 'Aqua', label: 'Aqua Raksha' },
+    { value: 'Poultry', label: 'Poultry Raksha' },
+    { value: 'Pashu', label: 'Pashu Raksha' },
+    { value: 'International', label: 'International Range' },
+    { value: 'HerbiGuard', label: 'HerbiGuard Series' },
   ];
 
   useEffect(() => {
@@ -43,9 +42,137 @@ function ProductsList() {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch('/api/products?status=inventory');
-      const data = await res.json();
-      setProducts(data.products || []);
+      // AXION SCIENTIFICS Products Data
+      const axionProducts = [
+        {
+          _id: '1',
+          name: 'Aqua Raksha',
+          description: 'Herbal formulation optimized for aquaculture species like fish and shrimp. Promotes water quality adaptation, disease resistance, and accelerated growth.',
+          category: 'Aqua',
+          ourPrice: 2500,
+          compareAtPrice: 3000,
+          image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+          featured: true,
+          averageRating: 4.8,
+          reviews: [],
+          tags: ['aquaculture', 'fish', 'shrimp', 'herbal', 'growth'],
+          stock: 100
+        },
+        {
+          _id: '2',
+          name: 'Poultry Raksha',
+          description: 'Potent natural blend enhancing immunity, feed conversion, and weight gain in poultry farms for broilers and layers.',
+          category: 'Poultry',
+          ourPrice: 1800,
+          compareAtPrice: 2200,
+          image: 'https://images.unsplash.com/photo-1548550023-4b5b5b5b5b5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+          featured: true,
+          averageRating: 4.7,
+          reviews: [],
+          tags: ['poultry', 'broilers', 'layers', 'immunity', 'growth'],
+          stock: 150
+        },
+        {
+          _id: '3',
+          name: 'Pashu Raksha',
+          description: 'Specialized supplements for milking and meat animals supporting health, lactation, and immunity in cows, buffaloes, sheep, goats.',
+          category: 'Pashu',
+          ourPrice: 3200,
+          compareAtPrice: 3800,
+          image: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+          featured: true,
+          averageRating: 4.9,
+          reviews: [],
+          tags: ['dairy', 'cattle', 'buffalo', 'lactation', 'immunity'],
+          stock: 80
+        },
+        {
+          _id: '4',
+          name: 'HerbiGuard Aqua',
+          description: 'Advanced aquafeed supplement for disease prevention and growth promotion in aquaculture globally.',
+          category: 'HerbiGuard',
+          ourPrice: 4500,
+          compareAtPrice: 5200,
+          image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+          featured: false,
+          averageRating: 4.6,
+          reviews: [],
+          tags: ['international', 'aquaculture', 'premium', 'global'],
+          stock: 60
+        },
+        {
+          _id: '5',
+          name: 'HerbiGuard Plume',
+          description: 'Targeted for robust poultry health and growth with enhanced disease resistance for international markets.',
+          category: 'HerbiGuard',
+          ourPrice: 2800,
+          compareAtPrice: 3300,
+          image: 'https://images.unsplash.com/photo-1548550023-4b5b5b5b5b5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+          featured: false,
+          averageRating: 4.5,
+          reviews: [],
+          tags: ['international', 'poultry', 'premium', 'global'],
+          stock: 70
+        },
+        {
+          _id: '6',
+          name: 'HerbiGuard Lacto',
+          description: 'Enhances milk yield and quality in dairy animals through natural immunomodulation for global markets.',
+          category: 'HerbiGuard',
+          ourPrice: 4200,
+          compareAtPrice: 4800,
+          image: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+          featured: false,
+          averageRating: 4.8,
+          reviews: [],
+          tags: ['international', 'dairy', 'milk', 'premium', 'global'],
+          stock: 50
+        },
+        {
+          _id: '7',
+          name: 'HerbiGuard Fleece',
+          description: 'Strengthens sheep and goats for better wool and meat production with natural immunity boost.',
+          category: 'HerbiGuard',
+          ourPrice: 2600,
+          compareAtPrice: 3100,
+          image: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+          featured: false,
+          averageRating: 4.4,
+          reviews: [],
+          tags: ['international', 'sheep', 'goat', 'wool', 'meat'],
+          stock: 40
+        },
+        {
+          _id: '8',
+          name: 'HerbiGuard Porci',
+          description: 'Supports pig health, growth, and immunity in commercial farming with natural herbal formulation.',
+          category: 'HerbiGuard',
+          ourPrice: 2400,
+          compareAtPrice: 2900,
+          image: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+          featured: false,
+          averageRating: 4.3,
+          reviews: [],
+          tags: ['international', 'pig', 'swine', 'commercial', 'growth'],
+          stock: 55
+        },
+        {
+          _id: '9',
+          name: 'HerbiGuard Equi',
+          description: 'Care for equines focusing on enhanced immunity, stamina, and coat quality for horses and donkeys.',
+          category: 'HerbiGuard',
+          ourPrice: 3800,
+          compareAtPrice: 4400,
+          image: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80',
+          featured: false,
+          averageRating: 4.7,
+          reviews: [],
+          tags: ['international', 'horse', 'equine', 'stamina', 'coat'],
+          stock: 35
+        }
+      ];
+      
+      setProducts(axionProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -109,22 +236,22 @@ function ProductsList() {
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedCategory('all');
-    setPriceRange({ min: 0, max: 10000 });
+    setPriceRange({ min: 0, max: 6000 });
     setSortBy('featured');
   };
 
   const activeFiltersCount = 
     (searchQuery ? 1 : 0) + 
     (selectedCategory !== 'all' ? 1 : 0) + 
-    (priceRange.min > 0 || priceRange.max < 10000 ? 1 : 0);
+    (priceRange.min > 0 || priceRange.max < 6000 ? 1 : 0);
 
   return (
     <div className="container-custom py-12">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">All Products</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">AXION SCIENTIFICS Products</h1>
         <p className="text-gray-600">
-          Browse our complete collection of premium nutraceutical products
+          Browse our complete collection of herbal feed supplements for poultry, aquaculture, dairy, and meat animals
         </p>
       </div>
 
@@ -136,7 +263,7 @@ function ProductsList() {
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder="Search herbal supplements..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -273,7 +400,7 @@ function ProductsList() {
                   <input
                     type="range"
                     min="0"
-                    max="10000"
+                    max="6000"
                     step="100"
                     value={priceRange.min}
                     onChange={(e) =>
@@ -289,7 +416,7 @@ function ProductsList() {
                   <input
                     type="range"
                     min="0"
-                    max="10000"
+                    max="6000"
                     step="100"
                     value={priceRange.max}
                     onChange={(e) =>

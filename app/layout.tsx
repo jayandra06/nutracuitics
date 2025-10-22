@@ -10,8 +10,8 @@ import { Analytics } from '@vercel/analytics/next';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Nutracuiticals - Premium Nutraceutical Products',
-  description: 'Your trusted source for premium nutraceutical products',
+  title: 'AXION SCIENTIFICS - Empowering Animal Health Naturally',
+  description: 'Herbal Feed Supplements for Poultry, Aqua, Dairy & Meat Animals. Where Science Meets Nature.',
 };
 
 export default function RootLayout({

@@ -30,15 +30,21 @@ interface ProductCardProps {
   product: {
     _id: string;
     name: string;
-    slug: string;
+    slug?: string;
     description: string;
-    images: string[];
+    images?: string[];
+    image?: string;
     ourPrice: number;
-    productLinks: ProductLink[];
+    compareAtPrice?: number;
+    productLinks?: ProductLink[];
     averageRating?: number;
     totalReviews?: number;
+    reviews?: any[];
     tags?: string[];
     stockLevel?: number;
+    stock?: number;
+    featured?: boolean;
+    category?: string;
   };
 }
 
@@ -54,8 +60,8 @@ export default function ProductCard({ product }: ProductCardProps) {
       name: product.name,
       price: product.ourPrice,
       quantity: 1,
-      image: product.images[0],
-      slug: product.slug,
+      image: product.images?.[0] || product.image || '/placeholder-product.jpg',
+      slug: product.slug || product._id,
     });
     toast.success('Added to cart!');
   };
@@ -71,11 +77,12 @@ export default function ProductCard({ product }: ProductCardProps) {
     }
   };
 
-  const isLowStock = product.stockLevel !== undefined && product.stockLevel > 0 && product.stockLevel <= 10;
-  const isOutOfStock = product.stockLevel !== undefined && product.stockLevel === 0;
+  const stockLevel = product.stockLevel || product.stock || 0;
+  const isLowStock = stockLevel > 0 && stockLevel <= 10;
+  const isOutOfStock = stockLevel === 0;
   
   // Get the lowest price platform for flash sale discount calculation
-  const lowestExternalPrice = product.productLinks.length > 0 
+  const lowestExternalPrice = product.productLinks && product.productLinks.length > 0 
     ? Math.min(...product.productLinks.map(link => link.price))
     : null;
 
@@ -114,15 +121,15 @@ export default function ProductCard({ product }: ProductCardProps) {
       {isLowStock && !isFlashSale && (
         <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-10">
           <div className="bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-            ONLY {product.stockLevel} LEFT
+            ONLY {stockLevel} LEFT
           </div>
         </div>
       )}
 
-      <Link href={`/products/${product.slug}`}>
+      <Link href={`/products/${product.slug || product._id}`}>
         <div className="relative h-64 w-full">
           <Image
-            src={product.images[0] || '/placeholder-product.jpg'}
+            src={product.images?.[0] || product.image || '/placeholder-product.jpg'}
             alt={product.name}
             fill
             className="object-cover"
@@ -131,7 +138,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </Link>
 
       <div className="p-4">
-        <Link href={`/products/${product.slug}`}>
+        <Link href={`/products/${product.slug || product._id}`}>
           <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-primary-600 transition">
             {product.name}
           </h3>
@@ -141,11 +148,11 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.description}
         </p>
 
-        {product.averageRating && product.totalReviews ? (
+        {product.averageRating && (product.totalReviews || product.reviews?.length) ? (
           <div className="flex items-center mb-3">
             <FiStar className="text-yellow-400 fill-yellow-400 w-4 h-4" />
             <span className="ml-1 text-sm text-gray-600">
-              {product.averageRating.toFixed(1)} ({product.totalReviews} reviews)
+              {product.averageRating.toFixed(1)} ({product.totalReviews || product.reviews?.length || 0} reviews)
             </span>
           </div>
         ) : null}
@@ -155,6 +162,16 @@ export default function ProductCard({ product }: ProductCardProps) {
             <div className="text-2xl font-bold text-primary-600">
               ₹{product.ourPrice.toFixed(2)}
             </div>
+            {product.compareAtPrice && product.compareAtPrice > product.ourPrice && (
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-400 line-through">
+                  ₹{product.compareAtPrice}
+                </span>
+                <span className="text-xs font-bold text-red-600">
+                  Save {Math.round(((product.compareAtPrice - product.ourPrice) / product.compareAtPrice) * 100)}%
+                </span>
+              </div>
+            )}
             {isFlashSale && lowestExternalPrice && lowestExternalPrice > product.ourPrice && (
               <div className="flex flex-col">
                 <span className="text-xs text-gray-400 line-through">
@@ -167,38 +184,40 @@ export default function ProductCard({ product }: ProductCardProps) {
             )}
           </div>
 
-          {/* External Platform Links */}
-          <div className="space-y-2 max-h-32 overflow-y-auto">
-            {product.productLinks.slice(0, 3).map((link, index) => {
-              const config = platformConfig[link.platform];
-              const Icon = config?.icon;
-              
-              return (
-                <a
-                  key={index}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between text-sm bg-gray-50 p-2 rounded hover:bg-gray-100 transition"
-                >
-                  <div className="flex items-center">
-                    {Icon ? (
-                      <Icon className={`w-4 h-4 mr-2 ${config.color}`} />
-                    ) : (
-                      <FiExternalLink className={`w-4 h-4 mr-2 ${config?.color || 'text-gray-600'}`} />
-                    )}
-                    <span className="text-xs">{config?.name || link.platform}</span>
-                  </div>
-                  <span className="font-semibold text-xs">₹{link.price}</span>
-                </a>
-              );
-            })}
-            {product.productLinks.length > 3 && (
-              <p className="text-xs text-gray-500 text-center">
-                +{product.productLinks.length - 3} more platforms
-              </p>
-            )}
-          </div>
+          {/* External Platform Links - Only show if productLinks exist */}
+          {product.productLinks && product.productLinks.length > 0 && (
+            <div className="space-y-2 max-h-32 overflow-y-auto">
+              {product.productLinks.slice(0, 3).map((link, index) => {
+                const config = platformConfig[link.platform];
+                const Icon = config?.icon;
+                
+                return (
+                  <a
+                    key={index}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between text-sm bg-gray-50 p-2 rounded hover:bg-gray-100 transition"
+                  >
+                    <div className="flex items-center">
+                      {Icon ? (
+                        <Icon className={`w-4 h-4 mr-2 ${config.color}`} />
+                      ) : (
+                        <FiExternalLink className={`w-4 h-4 mr-2 ${config?.color || 'text-gray-600'}`} />
+                      )}
+                      <span className="text-xs">{config?.name || link.platform}</span>
+                    </div>
+                    <span className="font-semibold text-xs">₹{link.price}</span>
+                  </a>
+                );
+              })}
+              {product.productLinks.length > 3 && (
+                <p className="text-xs text-gray-500 text-center">
+                  +{product.productLinks.length - 3} more platforms
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Add to Cart Button */}

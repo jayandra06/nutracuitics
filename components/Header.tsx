@@ -41,13 +41,30 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50">
+    <header className="bg-gradient-to-r from-purple-900 to-green-800 shadow-lg sticky top-0 z-50">
       <div className="container-custom">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-primary-600">
-              Nutracuiticals
+          <Link href="/" className="flex items-center space-x-3">
+            <div className="relative">
+              <div className="text-4xl font-bold text-white flex items-center">
+                <span>AXI</span>
+                <div className="relative mx-2">
+                  <div className="w-10 h-10 border-2 border-white rounded-full flex items-center justify-center">
+                    <div className="w-3 h-3 bg-white rounded-full"></div>
+                    <div className="absolute w-8 h-8 border border-white rounded-full opacity-60"></div>
+                    <div className="absolute w-10 h-10 border border-white rounded-full opacity-40"></div>
+                  </div>
+                </div>
+                <span>N</span>
+              </div>
+              <div className="text-sm font-bold text-blue-200 uppercase tracking-wider">
+                SCIENTIFICS
+              </div>
+              <div className="w-full h-0.5 bg-purple-300 mt-1"></div>
+              <div className="text-xs text-gray-200 mt-1">
+                Empowered by Science || Innovative in Solutions
+              </div>
             </div>
           </Link>
 
@@ -55,147 +72,49 @@ export default function Header() {
           <nav className="hidden md:flex items-center space-x-8">
             <Link
               href="/"
-              className="text-gray-700 hover:text-primary-600 transition"
+              className="text-white hover:text-yellow-300 transition font-medium"
             >
               Home
             </Link>
-
-            {/* Categories Dropdown */}
-            <div className="relative group">
-              <button className="flex items-center space-x-1 text-gray-700 hover:text-primary-600 transition">
-                <span>Categories</span>
-                <FiChevronDown className="w-4 h-4" />
-              </button>
-              <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                <Link
-                  href="/products"
-                  className="block px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600 font-semibold border-b"
-                >
-                  All Products
-                </Link>
-                {categories.map((category) => (
-                  <Link
-                    key={category}
-                    href={`/products?category=${category}`}
-                    className="block px-4 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <span className="text-2xl">{categoryIcons[category] || '📦'}</span>
-                      <span>{category}</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <Link
-              href="/products"
-              className="text-gray-700 hover:text-primary-600 transition"
-            >
-              All Products
-            </Link>
             <Link
               href="/about"
-              className="text-gray-700 hover:text-primary-600 transition"
+              className="text-white hover:text-yellow-300 transition font-medium"
             >
-              About
+              About Us
             </Link>
             <Link
-              href="/contact"
-              className="text-gray-700 hover:text-primary-600 transition"
+              href="/products"
+              className="text-white hover:text-yellow-300 transition font-medium"
             >
-              Contact
+              Products
+            </Link>
+            <Link
+              href="/scientific-edge"
+              className="text-white hover:text-yellow-300 transition font-medium"
+            >
+              Scientific Edge
+            </Link>
+            <Link
+              href="/testimonials"
+              className="text-white hover:text-yellow-300 transition font-medium"
+            >
+              Testimonials
             </Link>
           </nav>
 
           {/* Actions */}
           <div className="flex items-center space-x-4">
-            {/* Wishlist */}
+            {/* Get In Touch Button */}
             <Link
-              href="/wishlist"
-              className="relative text-gray-700 hover:text-red-500 transition"
+              href="/contact"
+              className="bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition"
             >
-              <FiHeart className="w-6 h-6" />
-              {wishlistItems.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {wishlistItems.length}
-                </span>
-              )}
+              Get In Touch
             </Link>
-
-            {/* Cart */}
-            <Link
-              href="/cart"
-              className="relative text-gray-700 hover:text-primary-600 transition"
-            >
-              <FiShoppingCart className="w-6 h-6" />
-              {getTotalItems() > 0 && (
-                <span className="absolute -top-2 -right-2 bg-primary-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {getTotalItems()}
-                </span>
-              )}
-            </Link>
-
-            {/* User Menu */}
-            {session ? (
-              <div className="relative group">
-                <button className="flex items-center space-x-2 text-gray-700 hover:text-primary-600 transition">
-                  <FiUser className="w-6 h-6" />
-                  <span className="hidden md:block">{session.user.name}</span>
-                </button>
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                  <Link
-                    href="/profile"
-                    className="block px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600"
-                  >
-                    My Profile
-                  </Link>
-                  <Link
-                    href="/orders"
-                    className="block px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600"
-                  >
-                    My Orders
-                  </Link>
-                  <Link
-                    href="/wishlist"
-                    className="block px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600"
-                  >
-                    My Wishlist
-                    {wishlistItems.length > 0 && (
-                      <span className="ml-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-                        {wishlistItems.length}
-                      </span>
-                    )}
-                  </Link>
-                  {session.user.role === 'admin' && (
-                    <Link
-                      href="/admin"
-                      className="block px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600"
-                    >
-                      Admin Panel
-                    </Link>
-                  )}
-                  <button
-                    onClick={() => signOut()}
-                    className="w-full text-left px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600 flex items-center space-x-2"
-                  >
-                    <FiLogOut />
-                    <span>Logout</span>
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <Link
-                href="/auth/login"
-                className="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition"
-              >
-                Login
-              </Link>
-            )}
 
             {/* Mobile Menu Button */}
             <button
-              className="md:hidden text-gray-700"
+              className="md:hidden text-white"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               <FiMenu className="w-6 h-6" />
@@ -205,53 +124,46 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t">
+          <div className="md:hidden py-4 border-t border-white/20">
             <nav className="flex flex-col space-y-2">
               <Link
                 href="/"
-                className="text-gray-700 hover:text-primary-600 py-2"
+                className="text-white hover:text-yellow-300 py-2 font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Home
               </Link>
-
-              {/* Categories - Mobile */}
-              <div>
-                <div className="text-gray-700 font-semibold py-2 border-b">
-                  Categories
-                </div>
-                <div className="pl-4 pt-2 space-y-1">
-                  <Link
-                    href="/products"
-                    className="block text-gray-600 hover:text-primary-600 py-2"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    All Products
-                  </Link>
-                  {categories.map((category) => (
-                    <Link
-                      key={category}
-                      href={`/products?category=${category}`}
-                      className="flex items-center space-x-2 text-gray-600 hover:text-primary-600 py-2"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <span>{categoryIcons[category] || '📦'}</span>
-                      <span>{category}</span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
               <Link
                 href="/about"
-                className="text-gray-700 hover:text-primary-600 py-2"
+                className="text-white hover:text-yellow-300 py-2 font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                About
+                About Us
+              </Link>
+              <Link
+                href="/products"
+                className="text-white hover:text-yellow-300 py-2 font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Products
+              </Link>
+              <Link
+                href="/scientific-edge"
+                className="text-white hover:text-yellow-300 py-2 font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Scientific Edge
+              </Link>
+              <Link
+                href="/testimonials"
+                className="text-white hover:text-yellow-300 py-2 font-medium"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Testimonials
               </Link>
               <Link
                 href="/contact"
-                className="text-gray-700 hover:text-primary-600 py-2"
+                className="text-white hover:text-yellow-300 py-2 font-medium"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Contact
